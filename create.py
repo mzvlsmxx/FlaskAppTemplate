@@ -12,9 +12,13 @@ if __name__ != '__main__':
 
     load_dotenv(find_dotenv())
 
-    db = mysql.connector.connect(
-        host=os.getenv('DB_HOST'),
-        user=os.getenv('DB_USER'),
-        passwd=os.getenv('DB_PASSWD')
-    )
+    db = None
+    try:
+        db = mysql.connector.connect(
+            host=os.getenv('DB_HOST'),
+            user=os.getenv('DB_USER'),
+            passwd=os.getenv('DB_PASSWD')
+        )
+    except mysql.connector.errors.DatabaseError:
+        print("\033[91m" + "Error: Database connection error" + "\033[0m")
 
