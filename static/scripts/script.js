@@ -1,10 +1,20 @@
 const exampleBtn = document.getElementById("test-btn")
 
+
 exampleBtn.addEventListener("click", sendDemoData)
 
-function sendData(data) {
-    fetch(
-        "http://localhost:7777/process_data",
+
+async function sendDemoData() {
+    const dataToSend = {
+        someData: "Some data to process"
+    };
+    await sendData(dataToSend);
+}
+
+
+async function sendData(data) {
+    await fetch(
+        "/process_data",
         {
             method: "POST",
             headers: {
@@ -15,9 +25,17 @@ function sendData(data) {
     );
 }
 
-function sendDemoData() {
-    const dataToSend = {
-        someData: "Some data to process"
-    };
-    sendData(dataToSend);
+
+async function fetchData() {
+    const response = await fetch(
+        '/process_data',
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    );
+    const data = await response.json();
+    console.log(data);
 }

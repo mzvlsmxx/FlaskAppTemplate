@@ -2,9 +2,9 @@ if __name__ != '__main__':
     import os
     from pathlib import Path
 
+    import mysql.connector
     from flask import Flask
     from flask_cors import CORS
-    import mysql.connector 
     from dotenv import load_dotenv, find_dotenv
 
     app: Flask = Flask(__name__, template_folder=Path('./templates'))
