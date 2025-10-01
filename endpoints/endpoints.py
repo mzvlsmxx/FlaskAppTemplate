@@ -1,6 +1,6 @@
 from flask import request, jsonify, render_template
 
-from create import db
+from database import *
 
 
 def index():
