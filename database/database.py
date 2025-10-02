@@ -45,3 +45,28 @@ def create_table() -> None:
                     );
                     """
                 )
+
+
+
+async def get_all_entries() -> dict[int, dict[str, int]]:
+    """
+    Select all payments from database_name.table_name table
+
+    :return: Returns a dict formed with id's of payments and their info
+    """
+    with contextlib.closing(mysql.connector.connect(host=host, user=user, passwd=passwd)) as connection:  # auto-closes connection
+        with connection:  # auto-commits
+            with contextlib.closing(connection.cursor()) as cursor:  # auto-closes cursor
+                cursor.execute(
+                    f"""
+                    SELECT * FROM database_name.table_name;
+                    """
+                )
+                entries = {}
+                for entry in cursor.fetchall():
+                    entries.update(
+                        {
+                            'key': 'value'
+                        }
+                    )
+                return entries

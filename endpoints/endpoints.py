@@ -3,11 +3,11 @@ from flask import request, jsonify, render_template
 from database import *
 
 
-def index():
+async def index():
     return render_template('index.html')
 
 
-def process_data():
+async def process_data():
     if request.method == 'POST':
         if request.is_json:
             data = request.get_json()
@@ -17,8 +17,7 @@ def process_data():
             return jsonify({"error": "Request must be JSON"}), 400
 
     elif request.method == 'GET':
-        data = {'Some backend data': 123456}
-        return jsonify(data)
+        return jsonify(await get_all_entries())
 
 
 def register_endpoints(app) -> None:

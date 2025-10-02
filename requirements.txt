@@ -1,5 +1,4 @@
-flask
-flask_sqlalchemy
+flask[async]
 flask_cors
 mysql-connector-python
 python-dotenv
