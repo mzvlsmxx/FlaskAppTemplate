@@ -11,6 +11,7 @@ async def process_data():
     if request.method == 'POST':
         if request.is_json:
             data = request.get_json()
+            print(data)
             # Now we can process data from request
             return jsonify({"message": "Data received"}), 200
         else:
