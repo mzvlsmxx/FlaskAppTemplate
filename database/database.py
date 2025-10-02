@@ -19,14 +19,16 @@ def create_database() -> None:
 
     :return: None
     """
-    with contextlib.closing(mysql.connector.connect(host=host, user=user, passwd=passwd)) as connection:
-        with connection:
-            with contextlib.closing(connection.cursor()) as cursor:
-                cursor.execute(
-                    f"""
-                    CREATE DATABASE IF NOT EXISTS database_name;
-                    """
-                )
+    connection = mysql.connector.connect(host=host, user=user, passwd=passwd)
+    cursor = connection.cursor()
+    cursor.execute(
+        f"""
+        CREATE DATABASE IF NOT EXISTS database_name;
+        """
+    )
+    connection.commit()
+    cursor.close()
+    connection.close()
 
 
 def create_table() -> None:
@@ -35,17 +37,19 @@ def create_table() -> None:
 
     :return: None
     """
-    with contextlib.closing(mysql.connector.connect(host=host, user=user, passwd=passwd)) as connection:
-        with connection:
-            with contextlib.closing(connection.cursor()) as cursor:
-                cursor.execute(
-                    f"""
-                    CREATE TABLE IF NOT EXISTS database_name.table_name(
-                        id MEDIUMINT NOT NULL AUTO_INCREMENT,
-                        PRIMARY KEY (id)
-                    );
-                    """
-                )
+    connection = mysql.connector.connect(host=host, user=user, passwd=passwd)
+    cursor = connection.cursor()
+    cursor.execute(
+        f"""
+        CREATE TABLE IF NOT EXISTS database_name.table_name(
+            id BIGINT NOT NULL AUTO_INCREMENT,
+            PRIMARY KEY (id)
+        );
+        """
+    )
+    connection.commit()
+    cursor.close()
+    connection.close()
 
 
 async def get_all_entries() -> dict[int, dict[str, int]]:
@@ -54,13 +58,18 @@ async def get_all_entries() -> dict[int, dict[str, int]]:
 
     :return: Returns a dict formed with id's of payments and their info
     """
-    with contextlib.closing(mysql.connector.connect(host=host, user=user, passwd=passwd)) as connection:
-        with connection:
-            with contextlib.closing(connection.cursor()) as cursor:
-                cursor.execute(
-                    f"""
-                    SELECT * FROM database_name.table_name;
-                    """
-                )
-                result = cursor.fetchall()
-                return {}
+    connection = mysql.connector.connect(host=host, user=user, passwd=passwd)
+    cursor = connection.cursor()
+    cursor.execute(
+        f"""
+        SELECT * FROM database_name.table_name;
+        """
+    )
+
+    result = cursor.fetchall()
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return {}
