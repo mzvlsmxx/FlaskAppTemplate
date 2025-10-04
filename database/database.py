@@ -1,5 +1,4 @@
 import os
-import contextlib
 
 import mysql.connector
 from dotenv import load_dotenv, find_dotenv
@@ -15,7 +14,7 @@ passwd = os.getenv('DB_PASSWD')
 
 def create_database() -> None:
     """
-    Creates database
+    Creates database named <database_name>
 
     :return: None
     """
@@ -33,7 +32,7 @@ def create_database() -> None:
 
 def create_table() -> None:
     """
-    Creates table
+    Creates table <table_name> in <database_name>
 
     :return: None
     """
@@ -54,15 +53,15 @@ def create_table() -> None:
 
 async def get_all_entries() -> dict[int, dict[str, int]]:
     """
-    Select all payments from database_name.table_name table
+    Select all entries from <database_name>.<table_name> table
 
-    :return: Returns a dict formed with id's of payments and their info
+    :return: Dict
     """
     connection = mysql.connector.connect(host=host, user=user, passwd=passwd)
     cursor = connection.cursor()
     cursor.execute(
         f"""
-        SELECT * FROM database_name.table_name;
+        SELECT * FROM <database_name>.<table_name>;
         """
     )
 

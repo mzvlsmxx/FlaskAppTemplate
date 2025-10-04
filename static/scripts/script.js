@@ -1,6 +1,4 @@
 const exampleBtn = document.getElementById("test-btn")
-
-
 exampleBtn.addEventListener("click", sendDemoData)
 
 
@@ -37,5 +35,4 @@ async function fetchData() {
         }
     );
     const data = await response.json();
-    console.log(data);
 }
