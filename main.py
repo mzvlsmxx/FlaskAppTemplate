@@ -5,12 +5,12 @@ if __name__ == '__main__':
 
     from create import app
     from endpoints import endpoints
-    from database import create_database, create_table
+    # from database import create_database, create_table
 
     endpoints.register_endpoints(app)
 
-    create_database()
-    create_table()
+    # create_database()
+    # create_table()
 
     load_dotenv(find_dotenv())
 

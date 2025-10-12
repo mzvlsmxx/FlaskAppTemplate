@@ -7,20 +7,25 @@ async def index():
     return render_template('index.html')
 
 
-async def process_data():
-    if request.method == 'POST':
-        if request.is_json:
-            data = request.get_json()
-            # Now we can process data from request
-            return jsonify({"message": "Data received"}), 200
-        else:
-            return jsonify({"error": "Request must be JSON"}), 400
+async def fetch_data():
+    return jsonify({}), 200
 
-    elif request.method == 'GET':
-        return jsonify(await get_all_entries())
+
+async def process_data():
+    if not request.is_json:
+        return jsonify({"Error": "Request must be JSON"}), 400
+    
+    url_args: dict = request.args.to_dict()
+    print(f'{url_args = }')
+    
+    data = request.get_json()
+    print(f'{data = }')
+
+    return jsonify({}), 200
 
 
 def register_endpoints(app) -> None:
     """Register all endpoints"""
     app.add_url_rule(rule='/', endpoint='index', view_func=index, methods=['GET'])
-    app.add_url_rule(rule='/process_data', endpoint='process_data', view_func=process_data, methods=['GET', 'POST'])
+    app.add_url_rule(rule='/fetch_data', endpoint='fetch_data', view_func=fetch_data, methods=['GET'])
+    app.add_url_rule(rule='/process_data', endpoint='process_data', view_func=process_data, methods=['POST'])

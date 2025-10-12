@@ -1,18 +1,52 @@
 const exampleBtn = document.getElementById("test-btn")
-exampleBtn.addEventListener("click", sendDemoData)
+exampleBtn.addEventListener("click", test)
 
 
-async function sendDemoData() {
+async function test() {
     const dataToSend = {
         someData: "Some data to process"
     };
-    await sendData(dataToSend);
+    await sendData(dataToSend).then(
+        () => {
+            fetchData().then(
+                data => {
+                    console.log(data)
+                }
+            )
+        }
+    );
+}
+
+
+async function fetchData() {
+    const params = new URLSearchParams(
+        {
+            "query_parameter_1": "some_value",
+            "query_parameter_2": "another_value"
+        }
+    )
+    const response = await fetch(
+        `/fetch_data?${params.toString()}`,
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    );
+    return await response.json();
 }
 
 
 async function sendData(data) {
+    const params = new URLSearchParams(
+        {
+            "query_parameter_1": "some_value",
+            "query_parameter_2": "another_value"
+        }
+    )
     await fetch(
-        "/process_data",
+        `/process_data?${params.toString()}`,
         {
             method: "POST",
             headers: {
@@ -21,18 +55,4 @@ async function sendData(data) {
             body: JSON.stringify(data)
         }
     );
-}
-
-
-async function fetchData() {
-    const response = await fetch(
-        '/process_data',
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }
-    );
-    const data = await response.json();
 }
