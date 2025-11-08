@@ -8,7 +8,12 @@ async def index():
 
 
 async def fetch_data():
-    return jsonify({}), 200
+    return jsonify(
+        {
+            "MySQLClient.check_access": MySQLClient.check_access(),
+            "RedisClient.check_access": RedisClient.check_access()
+        }
+    ), 200
 
 
 async def process_data():

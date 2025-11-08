@@ -6,10 +6,11 @@
             {% block title %}Default title{% endblock %}
         </title>
         {% block additional_links %}{% endblock %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/global.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/components.css') }}">
     </head>
     <body>
         {% block body %}{% endblock %}
-        <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+        <script type="module" src="{{ url_for('static', filename='scripts/source.js') }}"></script>
     </body>
 </html>

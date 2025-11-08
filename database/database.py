@@ -1,5 +1,6 @@
 import os
 
+import redis
 import mysql.connector
 from dotenv import load_dotenv, find_dotenv
 
@@ -7,101 +8,58 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
 
-host = os.getenv('DB_HOST')
-user = os.getenv('DB_USER')
-passwd = os.getenv('DB_PASSWD')
+mysql_host = os.getenv('MYSQL_HOST', '127.0.0.1')
+mysql_port = int(os.getenv('MYSQL_PORT', 3306))
+mysql_user = os.getenv('MYSQL_USER', 'root')
+mysql_passwd = os.getenv('MYSQL_PASSWD', 'passwd')
+
+redis_host = os.getenv('REDIS_HOST', '127.0.0.1')
+redis_port = int(os.getenv('REDIS_PORT', 6379))
 
 
-def create_database(database_name: str = 'database_name') -> None:
+class RedisClient:
     """
-    Creates database named <database_name>
-
-    :return: None
+    Redis client wrapper class
     """
-    connection = mysql.connector.connect(host=host, user=user, passwd=passwd)
-    cursor = connection.cursor()
-    cursor.execute(
-        f"""
-        CREATE DATABASE IF NOT EXISTS {database_name};
-        """
-    )
-    connection.commit()
-    cursor.close()
-    connection.close()
-
-
-def create_table(database_name: str = 'database_name', table_name: str = 'table_name') -> None:
-    """
-    Creates table <table_name> in <database_name>
-
-    :return: None
-    """
-    connection = mysql.connector.connect(host=host, user=user, passwd=passwd)
-    cursor = connection.cursor()
-    cursor.execute(
-        f"""
-        CREATE TABLE IF NOT EXISTS {database_name}.{table_name} (
-            `id` INT NOT NULL UNIQUE AUTO_INCREMENT,
-            `field_1` VARCHAR(90) NOT NULL,
-            `field_2` TINYINT(1) NOT NULL DEFAULT 0,
-            PRIMARY KEY (`task_id`)
-            ) ENGINE = InnoDB;
-        """
-    )
-    connection.commit()
-    cursor.close()
-    connection.close()
-
-
-async def get_entries(
-        id: int | None = None,
-        field_1: int | str | None = None,
-        field_2: int | str | None = None
-) -> dict[int, dict[str, int]]:
-    """
-    Select entries from <database_name>.<table_name> table
-
-    :param id: Select entry specified id
-    :param field_1: Select task with specified field_1
-    :param field_2: Select task with specified field_2
-    :return: Dict like {<id>: {field_1: <field_1>, field_2: <field_2>}}
-    """
-    connection = mysql.connector.connect(host=host, user=user, passwd=passwd)
-    cursor = connection.cursor()
-
-    query: str = 'SELECT * FROM database_name.table_name'
-    additional_criteria: bool = False
     
-    if any(field != None for field in [id, field_1, field_2]):
-        additional_criteria = True
-        query += ' WHERE '
+    @classmethod
+    def check_access(cls) -> bool:
+        """
+        Checks connection to Redis database
+        
+        :return: bool indicating connection status
+        """
+        try:
+            redis.Redis(host=redis_host, port=redis_port, db=0).ping()
+            return True
+        
+        except redis.ConnectionError:
+            return False
+    
+    def __init__(self):
+        self.client = redis.Redis(host=redis_host, port=redis_port, db=0)
 
-    if id != None:
-        query += f'id = {id} AND '
-    if field_1 != None:
-        query += f'field_1 = "{field_1}" AND '
-    if field_2 != None:
-        query += f'field_2 = "{field_2}" AND '
 
-    if additional_criteria:
-        cursor.execute(query[:-5] + ';')
-    else:
-        cursor.execute(query + ';')
+class MySQLClient:
+    """
+    MySQL client wrapper class
+    """
+    @classmethod
+    def check_access(cls) -> bool:
+        """
+        Checks connection to MySQL database
+        
+        :return: bool indicating connection status
+        """
+        try:
+            connection = mysql.connector.connect(host=mysql_host, port=mysql_port, user=mysql_user, passwd=mysql_passwd)
+            if connection.is_connected():
+                connection.close()
+                return True
+            return False
 
-    result = {}
-
-    for entry in cursor.fetchall():
-        result.update(
-            {
-                entry[0]: {  # type: ignore
-                    'field_1': entry[1],  # type: ignore
-                    'field_2': entry[2]  # type: ignore
-                }
-            }
-        )
-
-    connection.commit()
-    cursor.close()
-    connection.close()
-
-    return result
+        except mysql.connector.Error:
+            return False
+    
+    def __init__(self):
+        pass
