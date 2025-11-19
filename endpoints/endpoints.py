@@ -1,3 +1,5 @@
+import time
+
 from flask import request, jsonify, render_template
 
 from database import *
@@ -8,17 +10,19 @@ async def index():
 
 
 async def fetch_data():
+    start_time: float = time.perf_counter()
     return jsonify(
         {
-            "MySQLClient.check_access": MySQLClient.check_access(),
-            "RedisClient.check_access": RedisClient.check_access()
+            "MySQLAccess": MySQLClient.check_access(),
+            "RedisAccess": RedisClient.check_access(),
+            "TimeELapsed": time.perf_counter() - start_time
         }
     ), 200
 
 
 async def process_data():
     if not request.is_json:
-        return jsonify({"Error": "Request must be JSON"}), 400
+        return jsonify({"Error": "Request must be valid JSON"}), 400
     
     url_args: dict = request.args.to_dict()
     print(f'{url_args = }')

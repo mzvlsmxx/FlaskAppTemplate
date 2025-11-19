@@ -1,17 +1,10 @@
-# Database
-*.db
-
 # Miscellaneous
 misc/
 
-# PyCharm
+# Python
 .venv/
-venv/
 .idea/
 __pycache__/
-
-# Old versions
-*_old.py
 
 # Logs
 *.log

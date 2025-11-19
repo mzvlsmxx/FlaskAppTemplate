@@ -14,7 +14,7 @@ export async function fetchData() {
             }
         }
     );
-    return await response.json();
+    return response;
 }
 
 
@@ -25,7 +25,7 @@ export async function sendData(data) {
             "query_parameter_2": "another_value"
         }
     )
-    await fetch(
+    const response = await fetch(
         `/process_data?${params.toString()}`,
         {
             method: "POST",
@@ -35,4 +35,5 @@ export async function sendData(data) {
             body: JSON.stringify(data)
         }
     );
+    return response;
 }

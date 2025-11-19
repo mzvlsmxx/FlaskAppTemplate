@@ -1,22 +1,24 @@
 if __name__ == '__main__':
     import os
-    import time
 
     from dotenv import find_dotenv, load_dotenv
 
     from create import app
-    from endpoints import endpoints
-    from database import RedisClient, MySQLClient
+    from endpoints import register_endpoints
+    from exceptions import DatabaseConnectionError
+    from utils import ensure_mysql_connection
 
-    endpoints.register_endpoints(app)
-    
-    while not (RedisClient.check_access() and MySQLClient.check_access()):
-        time.sleep(5)
-    
-    load_dotenv(find_dotenv())
 
-    app.run(
-        host=os.getenv('APP_HOST'),  # type: ignore
-        port=os.getenv('APP_PORT'),  # type: ignore
-        debug=os.getenv('APP_DEBUG')  # type: ignore
-    )
+    if ensure_mysql_connection(timeout_s=60):
+        register_endpoints(app)
+        
+        load_dotenv(find_dotenv())
+
+        app.run(
+            host=os.getenv('APP_HOST', '0.0.0.0'),  # type: ignore
+            port=os.getenv('APP_PORT', 777),  # type: ignore
+            debug=os.getenv('APP_DEBUG', True)  # type: ignore
+        )
+    
+    else:
+        raise DatabaseConnectionError

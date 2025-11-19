@@ -21,3 +21,6 @@ misc/
 
 # Old
 **_old.py
+
+# Batch scripts
+*.bat

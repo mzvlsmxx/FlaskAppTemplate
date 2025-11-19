@@ -1,0 +1,23 @@
+services:
+  detached-redis:
+    image: redis:7.0-alpine
+    container_name: detached-redis
+    ports:
+      - "778:6379"
+    networks:
+      - detached-database-network
+
+  detached-mysql:
+    image: mysql:8.0.44-debian
+    container_name: detached-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=passwd
+    ports:
+      - "779:3306"
+    networks:
+      - detached-database-network
+
+networks:
+  detached-database-network:
+    name: detached-database-network
+    driver: bridge
