@@ -26,7 +26,7 @@ echo
 
 :menu
 echo.
-echo +----------^< App ^>-------------+-----^< Database ^>-------+
+echo +-------^< Whole App ^>----------+-----^< Database ^>-------+
 echo ^| 1. Up detached               ^| 9. Up detached         ^|
 echo ^| 2. Up detached and rebuild   ^| 10. ^Start              ^|
 echo ^| 3. ^Start                     ^| 11. Stop               ^|
@@ -39,9 +39,9 @@ echo +------------------------------+------------------------+
 echo ^|                                                       ^|
 echo +-----------------^< 17. ^Status All ^>--------------------+
 echo ^|                                                       ^|
-echo +--------------------^< 18. ^Exit ^>-----------------------+
+echo +--------------------^< 0. ^Exit ^>------------------------+
 echo.
-set /p choice="Choice (1-18) >> "
+set /p choice="Choice (0-17) >> "
 
 cls
 if "%choice%"=="1" goto app_up_detached
@@ -61,7 +61,7 @@ if "%choice%"=="14" goto redis_shell
 if "%choice%"=="15" goto mysql_logs
 if "%choice%"=="16" goto redis_logs
 if "%choice%"=="17" goto status_all
-if "%choice%"=="18" exit /b
+if "%choice%"=="0" exit /b
 goto menu
 
 :app_up_detached
