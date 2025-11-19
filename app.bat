@@ -26,7 +26,7 @@ echo
 
 :menu
 echo.
-echo +----------^< App ^>-----------+-------^< Database ^>-------+
+echo +----------^< App ^>-------------+-----^< Database ^>-------+
 echo ^| 1. Up detached               ^| 9. Up detached         ^|
 echo ^| 2. Up detached and rebuild   ^| 10. ^Start              ^|
 echo ^| 3. ^Start                     ^| 11. Stop               ^|
