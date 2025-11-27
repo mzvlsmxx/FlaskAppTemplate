@@ -7,7 +7,6 @@ RUN apk update \
     && apk add --no-cache tzdata \
     && cp /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo "$TZ" > /etc/timezone
-# RUN mkdir flask_app_template
 COPY ./requirements.txt flask_app_template/requirements.txt
 RUN apk add --no-cache --virtual .build-deps \
     build-base gcc musl-dev python3-dev librdkafka-dev \
