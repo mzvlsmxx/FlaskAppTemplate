@@ -3,6 +3,8 @@ import time
 from flask import request, jsonify, render_template
 
 from database import *
+from broker import KafkaClient
+import logs
 
 
 async def index():
@@ -29,6 +31,10 @@ async def process_data():
     
     data = request.get_json()
     print(f'{data = }')
+    
+    logs.actions.info(f'Data processed. (url_args={url_args}, data={data})')
+    
+    KafkaClient.check_access()
 
     return jsonify({}), 200
 

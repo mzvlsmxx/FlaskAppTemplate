@@ -5,21 +5,54 @@ services:
     build: .
     environment:
       - APP_HOST=0.0.0.0
-      - APP_PORT=777
+      - APP_PORT=7777
       - APP_DEBUG=True
       - REDIS_HOST=flask-app-template-redis
       - REDIS_PORT=6379
+      - BROKER_HOST=flask-app-template-kafka
+      - BROKER_PORT=29092
       - MYSQL_HOST=flask-app-template-mysql
       - MYSQL_PORT=3306
       - MYSQL_USER=root
       - MYSQL_PASSWD=passwd
     ports:
-      - "777:777"
+      - "7777:7777"
     depends_on:
       - flask-app-template-redis
       - flask-app-template-mysql
+      - flask-app-template-kafka
     networks:
       - flask-app-template-network
+
+  flask-app-template-zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: flask-app-template-zookeeper
+    ports:
+      - "776:2181"
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+    networks:
+      - flask-app-template-network
+
+  flask-app-template-kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: flask-app-template-kafka
+    ports:
+      - "7771:9092"
+      - "7772:29092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=flask-app-template-zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    depends_on:
+      - flask-app-template-zookeeper
+    networks:
+      - flask-app-template-network
+
 
   flask-app-template-redis:
     image: redis:7.0-alpine

@@ -9,14 +9,14 @@ if __name__ == '__main__':
     from utils import ensure_mysql_connection
 
 
-    if ensure_mysql_connection(timeout_s=60):
+    if ensure_mysql_connection(timeout_s=90):
         register_endpoints(app)
         
         load_dotenv(find_dotenv())
 
         app.run(
             host=os.getenv('APP_HOST', '0.0.0.0'),  # type: ignore
-            port=os.getenv('APP_PORT', 777),  # type: ignore
+            port=os.getenv('APP_PORT', 7777),  # type: ignore
             debug=os.getenv('APP_DEBUG', True)  # type: ignore
         )
     

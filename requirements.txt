@@ -3,3 +3,4 @@ flask_cors
 mysql-connector-python
 redis[hiredis]
 python-dotenv
+confluent-kafka==2.5.3

@@ -11,13 +11,13 @@ import logs as log
 load_dotenv(find_dotenv())
 
 
+redis_host = os.getenv('REDIS_HOST', '127.0.0.1')
+redis_port = int(os.getenv('REDIS_PORT', 778))
+
 mysql_host = os.getenv('MYSQL_HOST', '127.0.0.1')
-mysql_port = int(os.getenv('MYSQL_PORT', 3306))
+mysql_port = int(os.getenv('MYSQL_PORT', 779))
 mysql_user = os.getenv('MYSQL_USER', 'root')
 mysql_passwd = os.getenv('MYSQL_PASSWD', 'passwd')
-
-redis_host = os.getenv('REDIS_HOST', '127.0.0.1')
-redis_port = int(os.getenv('REDIS_PORT', 6379))
 
 
 class RedisClient:
