@@ -3,14 +3,14 @@ setlocal
 
 set "CONFIG_FILE=batch-config.ini"
 if not exist "%CONFIG_FILE%" (
-    echo APP_COMPOSE_FILE_PATH= >> batch-config.ini
-    echo APP_CONTAINER_NAME= >> batch-config.ini
-    echo DB_COMPOSE_FILE_PATH= >> batch-config.ini
-    echo MYSQL_CONTAINER_NAME= >> batch-config.ini
-    echo MYSQL_HOST= >> batch-config.ini
-    echo MYSQL_PORT= >> batch-config.ini
-    echo MYSQL_USER= >> batch-config.ini
-    echo REDIS_CONTAINER_NAME= >> batch-config.ini
+    echo APP_COMPOSE_FILE_PATH=>>batch-config.ini
+    echo APP_CONTAINER_NAME=>>batch-config.ini
+    echo DB_COMPOSE_FILE_PATH=>>batch-config.ini
+    echo MYSQL_CONTAINER_NAME=>>batch-config.ini
+    echo MYSQL_HOST=>>batch-config.ini
+    echo MYSQL_PORT=>>batch-config.ini
+    echo MYSQL_USER=>>batch-config.ini
+    echo REDIS_CONTAINER_NAME=>>batch-config.ini
     echo Created new config file: batch-config.ini
     echo Fullfill the config file with values for the correct script execution
     pause
@@ -26,26 +26,26 @@ echo
 
 :menu
 echo.
-echo +-------^< Whole App ^>----------+-----^< Database ^>-------+
-echo ^| 1. Up detached               ^| 9. Up detached         ^|
-echo ^| 2. Up detached and rebuild   ^| 10. ^Start              ^|
-echo ^| 3. ^Start                     ^| 11. Stop               ^|
-echo ^| 4. Stop                      ^| 12. Down               ^|
-echo ^| 5. Down                      ^| 13. Enter MySQL Shell  ^|
-echo ^| 6. Enter App Bash            ^| 14. Enter Redis Shell  ^|
-echo ^| 7. Show App Logs             ^| 15. Show MySQL Logs    ^|
-echo ^| 8. Show All Logs             ^| 16. Show Redis Logs    ^|
-echo +------------------------------+------------------------+
-echo ^|                                                       ^|
-echo +-----------------^< 17. ^Status All ^>--------------------+
-echo ^|                                                       ^|
-echo +--------------------^< 0. ^Exit ^>------------------------+
+echo +--------^< Whole App ^>---------+--------^< Database ^>----------+
+echo ^| 1. Up detached and rebuild   ^| 9. Up detached               ^|
+echo ^| 2. Up detached               ^| 10. ^Start                    ^|
+echo ^| 3. ^Start                     ^| 11. Stop                     ^|
+echo ^| 4. Stop                      ^| 12. Down                     ^|
+echo ^| 5. Down                      ^| 13. Enter MySQL Shell        ^|
+echo ^| 6. Enter App Bash            ^| 14. Enter Redis Shell        ^|
+echo ^| 7. Show App Logs             ^| 15. Show MySQL Logs          ^|
+echo ^| 8. Show All Logs             ^| 16. Show Redis Logs          ^|
+echo +------------------------------+------------------------------+
+echo ^|                                                             ^|
+echo +--------------------^< 17. ^Status All ^>-----------------------+
+echo ^|                                                             ^|
+echo +-----------------------^< 0. ^Exit ^>---------------------------+
 echo.
 set /p choice="Choice (0-17) >> "
 
 cls
-if "%choice%"=="1" goto app_up_detached
-if "%choice%"=="2" goto app_up_detached_rebuild
+if "%choice%"=="1" goto app_up_detached_rebuild
+if "%choice%"=="2" goto app_up_detached
 if "%choice%"=="3" goto app_start
 if "%choice%"=="4" goto app_stop
 if "%choice%"=="5" goto app_down
