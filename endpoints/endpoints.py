@@ -4,7 +4,7 @@ from flask import request, jsonify, render_template
 
 from database import *
 from broker import KafkaClient
-import logs
+import logs as log
 
 
 async def index():
@@ -17,6 +17,7 @@ async def fetch_data():
         {
             "MySQLAccess": MySQLClient.check_access(),
             "RedisAccess": RedisClient.check_access(),
+            "KafkaAccess": KafkaClient.check_access(),
             "TimeELapsed": time.perf_counter() - start_time
         }
     ), 200
@@ -32,9 +33,7 @@ async def process_data():
     data = request.get_json()
     print(f'{data = }')
     
-    logs.actions.info(f'Data processed. (url_args={url_args}, data={data})')
-    
-    KafkaClient.check_access()
+    log.actions.info(f'Data processed. (url_args={url_args}, data={data})')
 
     return jsonify({}), 200
 

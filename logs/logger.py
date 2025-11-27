@@ -23,3 +23,13 @@ actions_info_file_handlers.setLevel(DEBUG)
 
 actions_logger.addHandler(actions_info_file_handlers)
 actions_logger.setLevel(DEBUG)
+
+#  Logger for error in modules
+error_logger: Logger = getLogger('errors')
+
+error_file_handler: FileHandler = FileHandler('logs/errors.log')
+error_file_handler.setFormatter(universal_formatter)
+error_file_handler.setLevel(ERROR)
+
+error_logger.addHandler(error_file_handler)
+error_logger.setLevel(ERROR)
